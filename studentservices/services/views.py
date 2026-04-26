@@ -3,6 +3,11 @@ from django.shortcuts import redirect
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from .models import Fee
+
+from django.http import Http404, HttpResponse
+
 
 # Create your views here.
 
@@ -37,3 +42,15 @@ def loginView(request):
 def logoutView(request):
 	logout(request)
 	return redirect("../")
+
+@login_required
+def feesView(request):
+	allFees = Fee.objects.filter(user=request.user)
+
+	filter = request.GET.get("status")
+	if filter in ["Unpaid", "Paid"]:
+		allFees = allFees.filter(status=filter)
+
+	fees = allFees.order_by("-date")
+
+	return render(request, "services/fee.html", {"fees": fees})

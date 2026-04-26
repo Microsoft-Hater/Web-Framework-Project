@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			.table{
+				border: 1px solid black;
+				border-collapse: collapse;
+			}
+		</style>
+		<title>User Fees</title>
+	</head>
+	<body>
+		<h1>My Fees</h1>
+
+		<form method="get" action="{%url 'fees'%}">
+			<label>Status:
+				<select name="status">
+					<option value="">All</option>
+					<option value="Unpaid">Unpaid</option>
+					<option value="Paid">Paid</option>
+				</select>
+			</label>
+			<button type="submit">Filter</button>
+		</form>
+
+		<table class="table">
+			<tr class="table">
+				<th class="table">Name</th>
+				<th class="table">Amount</th>
+				<th class="table">Status</th>
+				<th class="table">Date</th>
+			</tr>
+			{%for fee in fees%}
+			<tr>
+				<td class="table">{{fee.name}}</td>
+				<td class="table">€{{fee.amount}}</td>
+				<td class="table">{{fee.status}}</td>
+				<td class="table">{{fee.date}}</td>
+			</tr>
+			{%empty%}
+			<tr>
+				<td colspan="4">No Fees Found</td>
+			</tr>
+			{%endfor%}
+		</table>
+		<br>
+		<a href="{%url 'index'%}">Back To Home</a>
+	</body>
+</html>

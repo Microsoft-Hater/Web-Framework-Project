@@ -8,6 +8,9 @@
 		<h2>Homepage</h2>
 			{%if user.username%}
 				<p>Hello {{user.username}}, You Are A {{group}}</p>
+				<a href="{%url 'fees'%}">View Fees</a>
+				<br>
+				<br>
 				<a href="{%url 'logout'%}">Logout</a>
 			{%else%}
 				<p>Hello, You Havent Logged In Yet</p>
