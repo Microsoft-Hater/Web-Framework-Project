@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			.table{
+				border: 1px solid black;
+				border-collapse: collapse;
+			}
+		</style>
+		<title>My Grades</title>
+	</head>
+	<body>
+		<h1>My Grades</h1>
+
+		<table class="table">
+			<tr class="table">
+				<th class="table">Subject</th>
+				<th class="table">Grade</th>
+				<th class="table">Percentage</th>
+			</tr>
+			{%for grade in grades%}
+			<tr>
+				<td class="table">{{grade.subject}}</td>
+				<td class="table">{{grade.grade}}</td>
+				<td class="table">{{grade.percentage}}</td>
+			</tr>
+			{%empty%}
+			<tr>
+				<td colspan="4">No Grades Found</td>
+			</tr>
+			{%endfor%}
+		</table>
+		<br>
+		<a href="{%url 'index'%}">Back To Home</a>
+	</body>
+</html>

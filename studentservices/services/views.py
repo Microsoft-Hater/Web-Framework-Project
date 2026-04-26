@@ -5,6 +5,7 @@ from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from .models import Fee
+from .models import Result
 
 from django.http import Http404, HttpResponse
 
@@ -54,3 +55,9 @@ def feesView(request):
 	fees = allFees.order_by("-date")
 
 	return render(request, "services/fee.html", {"fees": fees})
+
+@login_required
+def gradesView(request):
+	allGrades = Result.objects.filter(user=request.user)
+
+	return render(request, "services/grades.html", {"grades": allGrades})
