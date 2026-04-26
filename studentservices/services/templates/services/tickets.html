@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			.table{
+				border: 1px solid black;
+				border-collapse: collapse;
+			}
+		</style>
+		<title>My Tickets</title>
+	</head>
+	<body>
+		<h1>My Tickets</h1>
+
+		<form method="get" action="{%url 'tickets'%}">
+			<label>Status:
+				<select name="status">
+					<option value="">All</option>
+					<option value="Open">Open</option>
+					<option value="In Progress">In Progress</option>
+					<option value="Resolved">Resolved</option>
+				</select>
+			</label>
+			<button type="submit">Filter</button>
+		</form>
+
+		<table class="table">
+			<tr class="table">
+				<th class="table">Title</th>
+				<th class="table">Description</th>
+				<th class="table">Status</th>
+				<th class="table">Date</th>
+			</tr>
+			{%for ticket in tickets%}
+			<tr>
+				<td class="table">{{ticket.title}}</td>
+				<td class="table">{{ticket.description}}</td>
+				<td class="table">{{ticket.status}}</td>
+				<td class="table">{{ticket.date}}</td>
+			</tr>
+			{%empty%}
+			<tr>
+				<td colspan="4">No Tickets Found</td>
+			</tr>
+			{%endfor%}
+		</table>
+		<br>
+		<a href="{%url 'index'%}">Back To Home</a>
+	</body>
+</html>

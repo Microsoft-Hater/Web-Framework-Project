@@ -6,9 +6,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from .models import Fee
 from .models import Result
-
-from django.http import Http404, HttpResponse
-
+from .models import Ticket
 
 # Create your views here.
 
@@ -61,3 +59,15 @@ def gradesView(request):
 	allGrades = Result.objects.filter(user=request.user)
 
 	return render(request, "services/grades.html", {"grades": allGrades})
+
+@login_required
+def ticketsView(request):
+	allTickets = Ticket.objects.filter(user=request.user)
+
+	filter = request.GET.get("status")
+	if filter in ["Open", "In Progress", "Resolved"]:
+		allTickets = allTickets.filter(status=filter)
+
+	tickets = allTickets.order_by("-date")
+
+	return render(request, "services/tickets.html", {"tickets": tickets})
