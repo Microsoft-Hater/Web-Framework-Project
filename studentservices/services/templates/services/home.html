@@ -6,8 +6,8 @@
 	</head>
 	<body>
 		<h2>Homepage</h2>
-			{%if username%}
-				<p>Hello {{username}}</p>
+			{%if user.username%}
+				<p>Hello {{user.username}}, You Are A {{group}}</p>
 				<a href="{%url 'logout'%}">Logout</a>
 			{%else%}
 				<p>Hello, You Havent Logged In Yet</p>

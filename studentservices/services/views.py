@@ -8,7 +8,14 @@ from django.contrib.auth import logout
 
 def homeView(request):
 	if(request.user is not None):
-		return render(request, "services/home.html", {"username" : request.user.username})
+		group = ""
+		if(request.user.groups.filter(name="students").exists()):
+			group = "Student"
+		elif(request.user.groups.filter(name="lecturers").exists()):
+			group = "Lecturer"
+		elif(request.user.groups.filter(name="helpdesk").exists()):
+			group = "Help Desk Employee"
+		return render(request, "services/home.html", {"user" : request.user, "group" : group})
 	else:
 		return render(request, "services/home.html")
 
