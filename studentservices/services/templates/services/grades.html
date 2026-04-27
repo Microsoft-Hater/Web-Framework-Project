@@ -7,19 +7,33 @@
 				border-collapse: collapse;
 			}
 		</style>
-		<title>My Grades</title>
+		{%if isLecturer%}
+			<title>Student Grades</title>
+		{%else%}
+			<title>My Grades</title>
+		{%endif%}
 	</head>
 	<body>
-		<h1>My Grades</h1>
+		{%if isLecturer%}
+			<h1>Student Grades</h1>
+		{%else%}
+			<h1>My Grades</h1>
+		{%endif%}
 
 		<table class="table">
 			<tr class="table">
+				{%if isLecturer%}
+					<th class="table">User</th>
+				{%endif%}
 				<th class="table">Subject</th>
 				<th class="table">Grade</th>
 				<th class="table">Percentage</th>
 			</tr>
 			{%for grade in grades%}
 			<tr>
+				{%if isLecturer%}
+					<td class="table">{{grade.user}}</td>
+				{%endif%}
 				<td class="table">{{grade.subject}}</td>
 				<td class="table">{{grade.grade}}</td>
 				<td class="table">{{grade.percentage}}</td>

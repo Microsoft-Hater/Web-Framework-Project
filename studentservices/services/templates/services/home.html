@@ -8,12 +8,19 @@
 		<h2>Homepage</h2>
 			{%if user.username%}
 				<p>Hello {{user.username}}, You Are A {{group}}</p>
-				<a href="{%url 'fees'%}">View Fees</a>
-				<br>
-				<a href="{%url 'grades'%}">View Grades</a>
-				<br>
-				<a href="{%url 'tickets'%}">Tickets</a>
-				<br>
+				{%if group == "Student"%}
+					<a href="{%url 'fees'%}">View Fees</a>
+					<br>
+				{%endif%}
+				{%if group != "Help Desk Employee"%}
+					<a href="{%url 'grades'%}">View Grades</a>
+					<br>
+				{%endif%}
+				{%if group != "Lecturer"%}
+					<a href="{%url 'tickets'%}">Tickets</a>
+					<br>
+				{%endif%}
+				
 				<br>
 				<a href="{%url 'logout'%}">Logout</a>
 			{%else%}

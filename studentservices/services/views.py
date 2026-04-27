@@ -59,9 +59,16 @@ def feesView(request):
 @login_required
 @permission_required("services.view_result")
 def gradesView(request):
-	allGrades = Result.objects.filter(user=request.user)
 
-	return render(request, "services/grades.html", {"grades": allGrades})
+	allGrades = ""
+	isLecturer = False
+	if(request.user.groups.filter(name="lecturers").exists()):
+		allGrades = Result.objects.filter()
+		isLecturer = True
+	else:
+		allGrades = Result.objects.filter(user=request.user)
+
+	return render(request, "services/grades.html", {"grades": allGrades, "isLecturer": isLecturer})
 
 @login_required
 @permission_required("services.view_ticket")
