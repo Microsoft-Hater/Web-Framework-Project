@@ -29,7 +29,8 @@
 					<option value="Resolved">Resolved</option>
 				</select>
 			</label>
-			<label>User:
+			{%if isHelpDesk%}
+				<label>User:
 					<select name="user">
 						<option value="">All</option>
 						{%for user in users%}
@@ -37,6 +38,7 @@
 						{%endfor%}
 					</select>
 				</label>
+			{%endif%}
 			<button type="submit">Filter</button>
 		</form>
 
@@ -49,7 +51,9 @@
 				<th class="table">Description</th>
 				<th class="table">Status</th>
 				<th class="table">Date</th>
-				<th class="table">Action</th>
+				{%if isHelpDesk%}
+					<th class="table">Action</th>
+				{%endif%}
 			</tr>
 			{%for ticket in tickets%}
 				<tr>
@@ -60,9 +64,9 @@
 					<td class="table">{{ticket.description}}</td>
 					<td class="table">{{ticket.status}}</td>
 					<td class="table">{{ticket.date}}</td>
-					{%if ticket.status != "Resolved"%}
+					{%if ticket.status != "Resolved" and isHelpDesk%}
 						<td class="table"><a href="{%url 'updateTicket' ticket.id%}">Update Status</a></td>
-					{%else%}
+					{%elif isHelpDesk%}
 						<td class="table">No Action Needed</td>
 					{%endif%}
 				</tr>
