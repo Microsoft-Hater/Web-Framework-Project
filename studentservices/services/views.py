@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import permission_required
 from .models import Fee
 from .models import Result
 from .models import Ticket
@@ -43,6 +44,7 @@ def logoutView(request):
 	return redirect("../")
 
 @login_required
+@permission_required("services.view_fee")
 def feesView(request):
 	allFees = Fee.objects.filter(user=request.user)
 
@@ -55,12 +57,14 @@ def feesView(request):
 	return render(request, "services/fee.html", {"fees": fees})
 
 @login_required
+@permission_required("services.view_result")
 def gradesView(request):
 	allGrades = Result.objects.filter(user=request.user)
 
 	return render(request, "services/grades.html", {"grades": allGrades})
 
 @login_required
+@permission_required("services.view_ticket")
 def ticketsView(request):
 	allTickets = Ticket.objects.filter(user=request.user)
 
@@ -73,6 +77,7 @@ def ticketsView(request):
 	return render(request, "services/tickets.html", {"tickets": tickets})
 
 @login_required
+@permission_required("services.change_fee")
 def payFee(request, feeid):
 	fee = Fee.objects.get(id=feeid)
 	fee.status = "Paid"
@@ -80,6 +85,7 @@ def payFee(request, feeid):
 	return redirect("fees")
 
 @login_required
+@permission_required("services.add_ticket")
 def createTicket(request):
 	if request.method == "POST":
 		title = request.POST.get("title")
