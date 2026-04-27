@@ -200,3 +200,21 @@ def updateFee(request, feeid):
 	else:
 		fee = Fee.objects.get(id=feeid)
 		return render(request, "services/updateFee.html", {"fee": fee})
+
+@login_required
+@permission_required("services.add_fee")
+def createFee(request):
+	if request.method == "POST":
+		username = request.POST.get("user")
+		name = request.POST.get("name")
+		amount = request.POST.get("amount")
+		status = request.POST.get("status")
+
+		user = User.objects.get(username=username)
+
+		Fee.objects.create(user=user, name=name, amount=amount, status=status)
+
+		return redirect("fees")
+	else:
+		allStudents = User.objects.filter(groups__name="students")
+		return render(request, "services/createFee.html", {"students": allStudents})

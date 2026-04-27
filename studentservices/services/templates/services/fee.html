@@ -76,6 +76,10 @@
 			{%endfor%}
 		</table>
 		<br>
+		{%if isHelpDesk%}
+			<a href="{%url 'createFee'%}">Add Fee</a>
+			<br>
+		{%endif%}
 		<a href="{%url 'index'%}">Back To Home</a>
 	</body>
 </html>
