@@ -14,10 +14,6 @@
 			<select name="user" id="user">
 				{%for student in students%}
 					<option value="{{student.username}}">{{student.username}}</option>
-				{%empty%}
-				<tr>
-					<td colspan="3">No Grades Found</td>
-				</tr>
 				{%endfor%}
 			</select>
 

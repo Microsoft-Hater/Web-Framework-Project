@@ -16,6 +16,18 @@
 	<body>
 		{%if isLecturer%}
 			<h1>Student Grades</h1>
+			
+			<form method="get" action="{%url 'grades'%}">
+				<label>Student:
+					<select name="student">
+						<option value="">All</option>
+						{%for student in students%}
+							<option value="{{student.username}}">{{student.username}}</option>
+						{%endfor%}
+					</select>
+				</label>
+				<button type="submit">Filter</button>
+			</form>
 		{%else%}
 			<h1>My Grades</h1>
 		{%endif%}
