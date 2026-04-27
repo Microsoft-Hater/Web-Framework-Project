@@ -7,10 +7,18 @@
 				border-collapse: collapse;
 			}
 		</style>
-		<title>My Tickets</title>
+		{%if isHelpDesk%}
+			<title>All Tickets</title>
+		{%else%}
+			<title>My Tickets</title>
+		{%endif%}
 	</head>
 	<body>
-		<h1>My Tickets</h1>
+		{%if isHelpDesk%}
+			<h1>All Tickets</h1>
+		{%else%}
+			<h1>My Tickets</h1>
+		{%endif%}
 
 		<form method="get" action="{%url 'tickets'%}">
 			<label>Status:
@@ -21,22 +29,42 @@
 					<option value="Resolved">Resolved</option>
 				</select>
 			</label>
+			<label>User:
+					<select name="user">
+						<option value="">All</option>
+						{%for user in users%}
+							<option value="{{user.username}}">{{user.username}}</option>
+						{%endfor%}
+					</select>
+				</label>
 			<button type="submit">Filter</button>
 		</form>
 
 		<table class="table">
 			<tr class="table">
+				{%if isHelpDesk%}
+					<th class="table">User</th>
+				{%endif%}
 				<th class="table">Title</th>
 				<th class="table">Description</th>
 				<th class="table">Status</th>
 				<th class="table">Date</th>
+				<th class="table">Action</th>
 			</tr>
 			{%for ticket in tickets%}
 				<tr>
+					{%if isHelpDesk%}
+						<td class="table">{{ticket.user}}</td>
+					{%endif%}
 					<td class="table">{{ticket.title}}</td>
 					<td class="table">{{ticket.description}}</td>
 					<td class="table">{{ticket.status}}</td>
 					<td class="table">{{ticket.date}}</td>
+					{%if ticket.status != "Resolved"%}
+						<td class="table"><a href="{%url 'updateTicket' ticket.id%}">Update Status</a></td>
+					{%else%}
+						<td class="table">No Action Needed</td>
+					{%endif%}
 				</tr>
 			{%empty%}
 				<tr>
@@ -45,8 +73,10 @@
 			{%endfor%}
 		</table>
 		<br>
-		<a href="{%url 'createTicket'%}">Create New Ticket</a>
-		<br>
+		{%if not isHelpDesk%}
+			<a href="{%url 'createTicket'%}">Create New Ticket</a>
+			<br>
+		{%endif%}
 		<a href="{%url 'index'%}">Back To Home</a>
 	</body>
 </html>

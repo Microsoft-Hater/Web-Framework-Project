@@ -65,14 +65,13 @@ def gradesView(request):
 	allStudents = ""
 	isLecturer = False
 	if(request.user.groups.filter(name="lecturers").exists()):
-		allGrades = Result.objects.filter()
+		allGrades = Result.objects.all()
 		allStudents = User.objects.filter(groups__name="students")
 
 		filter = request.GET.get("student")
 		if filter is not None and filter != "":
 			filterUser = User.objects.get(username=filter)
-			if filterUser in User.objects.all():
-				allGrades = allGrades.filter(user=filterUser)
+			allGrades = allGrades.filter(user=filterUser)
 		isLecturer = True
 	else:
 		allGrades = Result.objects.filter(user=request.user)
@@ -83,14 +82,24 @@ def gradesView(request):
 @permission_required("services.view_ticket")
 def ticketsView(request):
 	allTickets = Ticket.objects.filter(user=request.user)
+	allUsers = User.objects.all()
+	isHelpDesk = False
 
+	if(request.user.groups.filter(name="helpdesk").exists()):
+		allTickets = Ticket.objects.all()
+		filter2 = request.GET.get("user")
+		if filter2 is not None and filter2 != "":
+			filterUser = User.objects.get(username=filter2)
+			allTickets = allTickets.filter(user=filterUser)
+
+		isHelpDesk = True
 	filter = request.GET.get("status")
 	if filter in ["Open", "In Progress", "Resolved"]:
 		allTickets = allTickets.filter(status=filter)
 
 	tickets = allTickets.order_by("-date")
 
-	return render(request, "services/tickets.html", {"tickets": tickets})
+	return render(request, "services/tickets.html", {"tickets": tickets, "isHelpDesk": isHelpDesk, "users": allUsers})
 
 @login_required
 @permission_required("services.change_fee")
@@ -132,3 +141,14 @@ def createGrade(request):
 	else:
 		allStudents = User.objects.filter(groups__name="students")
 		return render(request, "services/createGrade.html", {"students": allStudents})
+
+@login_required
+@permission_required("services.change_ticket")
+def updateTicket(request, ticketid):
+	ticket = Ticket.objects.get(id=ticketid)
+	if(ticket.status == "Open"):
+		ticket.status = "In Progress"
+	elif(ticket.status == "In Progress"):
+		ticket.status = "Resolved"
+	ticket.save()
+	return redirect("tickets")

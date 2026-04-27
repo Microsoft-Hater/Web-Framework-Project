@@ -12,4 +12,5 @@ urlpatterns = [
 	path("payFee/<int:feeid>", views.payFee, name="payFee"),
 	path("createTicket/", views.createTicket, name="createTicket"),
 	path("createGrade/", views.createGrade, name="createGrade"),
+	path("updateTicket/<int:ticketid>", views.updateTicket, name="updateTicket"),
 ]
