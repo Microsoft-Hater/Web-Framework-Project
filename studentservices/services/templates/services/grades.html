@@ -40,6 +40,7 @@
 				<th class="table">Subject</th>
 				<th class="table">Grade</th>
 				<th class="table">Percentage</th>
+				<th class="table">Action</th>
 			</tr>
 			{%for grade in grades%}
 				<tr>
@@ -49,6 +50,7 @@
 					<td class="table">{{grade.subject}}</td>
 					<td class="table">{{grade.grade}}</td>
 					<td class="table">{{grade.percentage}}</td>
+					<td class="table"><a href="{%url 'updateGrade' grade.id%}">Update Grade</a></td>
 				</tr>
 			{%empty%}
 				<tr>

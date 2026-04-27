@@ -131,8 +131,6 @@ def createGrade(request):
 		grade = request.POST.get("grade")
 		percentage = request.POST.get("percentage")
 
-		print(username)
-
 		user = User.objects.get(username=username)
 
 		Result.objects.create(user=user, subject=subject, grade=grade, percentage=percentage)
@@ -152,3 +150,25 @@ def updateTicket(request, ticketid):
 		ticket.status = "Resolved"
 	ticket.save()
 	return redirect("tickets")
+
+@login_required
+# @permission_required("services.change_result")
+def updateGrade(request, gradeid):
+	if request.method == "POST":
+		subject = request.POST.get("subject")
+		grade = request.POST.get("grade")
+		percentage = request.POST.get("percentage")
+
+		print(gradeid)
+
+		result = Result.objects.get(id=gradeid)
+
+		result.subject = subject
+		result.grade = grade
+		result.percentage = percentage
+		result.save()
+
+		return redirect("grades")
+	else:
+		grade = Result.objects.get(id=gradeid)
+		return render(request, "services/updateGrade.html", {"grade": grade})
