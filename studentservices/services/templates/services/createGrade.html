@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Add New Grade</title>
+	</head>
+	<body>
+		<h2>Add New Grade</h2>
+			<p style="color: red;">{{error}}</p>
+
+		<form method="post">
+			{%csrf_token%}
+			<label for="user">User:</label>
+			<select name="user" id="user">
+				{%for student in students%}
+					<option value="{{student.username}}">{{student.username}}</option>
+				{%empty%}
+				<tr>
+					<td colspan="3">No Grades Found</td>
+				</tr>
+				{%endfor%}
+			</select>
+
+			<br><br>
+
+			<label for="subject">Subject:</label>
+			<input type="text" id="subject" name="subject">
+
+			<br><br>
+
+			<label for="grade">Grade:</label>
+			<input type="text" id="grade" name="grade" maxlength="1">
+
+			<br><br>
+
+			<label for="percentage">Percentage:</label>
+			<input type="number" id="percentage" name="percentage" min="0" max="100">
+
+			<br><br>
+
+			<button type="submit">Add Grade</button>
+		</form>
+	</body>
+</html>

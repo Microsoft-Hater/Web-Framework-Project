@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import permission_required
 from .models import Fee
 from .models import Result
 from .models import Ticket
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -103,3 +104,23 @@ def createTicket(request):
 		return redirect("tickets")
 	else:
 		return render(request, "services/createTicket.html")
+
+@login_required
+@permission_required("services.add_result")
+def createGrade(request):
+	if request.method == "POST":
+		username = request.POST.get("user")
+		subject = request.POST.get("subject")
+		grade = request.POST.get("grade")
+		percentage = request.POST.get("percentage")
+
+		print(username)
+
+		user = User.objects.get(username=username)
+
+		Result.objects.create(user=user, subject=subject, grade=grade, percentage=percentage)
+
+		return redirect("grades")
+	else:
+		allStudents = User.objects.filter(groups__name="students")
+		return render(request, "services/createGrade.html", {"students": allStudents})
