@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Update Fee</title>
+	</head>
+	<body>
+		<h2>Update Fee</h2>
+			<p style="color: red;">{{error}}</p>
+
+		<form method="post">
+			{%csrf_token%}
+			<p for="user">User: {{fee.user.username}}</p>
+
+			<label for="name">Name:</label>
+			<input type="text" id="name" name="name" value="{{fee.name}}">
+
+			<br><br>
+
+			<label for="amount"">Amount:</label>
+			<input type="number" id="amount" name="amount" min="0" max="100000" value="{{fee.amount}}" step="0.01">
+
+			<br><br>
+
+			<label for="status">Status:</label>
+			<select name="status">
+				<option value="Unpaid">Unpaid</option>
+				<option value="Paid">Paid</option>
+			</select>
+
+			<br><br>
+
+			<button type="submit">Update Fee</button>
+		</form>
+	</body>
+</html>

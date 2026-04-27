@@ -48,22 +48,32 @@ def logoutView(request):
 @permission_required("services.view_fee")
 def feesView(request):
 	allFees = Fee.objects.filter(user=request.user)
+	allStudents = User.objects.filter(groups__name="students")
+	isHelpDesk = False
 
+	if(request.user.groups.filter(name="helpdesk").exists()):
+		allFees = Fee.objects.all()
+		filter2 = request.GET.get("student")
+		if filter2 is not None and filter2 != "":
+			filterUser = User.objects.get(username=filter2)
+			allFees = allFees.filter(user=filterUser)
+
+		isHelpDesk = True
 	filter = request.GET.get("status")
 	if filter in ["Unpaid", "Paid"]:
 		allFees = allFees.filter(status=filter)
 
 	fees = allFees.order_by("-date")
 
-	return render(request, "services/fee.html", {"fees": fees})
+	return render(request, "services/fee.html", {"fees": fees, "isHelpDesk": isHelpDesk, "students": allStudents})
 
 @login_required
 @permission_required("services.view_result")
 def gradesView(request):
-
 	allGrades = ""
 	allStudents = ""
 	isLecturer = False
+
 	if(request.user.groups.filter(name="lecturers").exists()):
 		allGrades = Result.objects.all()
 		allStudents = User.objects.filter(groups__name="students")
@@ -152,14 +162,12 @@ def updateTicket(request, ticketid):
 	return redirect("tickets")
 
 @login_required
-# @permission_required("services.change_result")
+@permission_required("services.change_result")
 def updateGrade(request, gradeid):
 	if request.method == "POST":
 		subject = request.POST.get("subject")
 		grade = request.POST.get("grade")
 		percentage = request.POST.get("percentage")
-
-		print(gradeid)
 
 		result = Result.objects.get(id=gradeid)
 
@@ -172,3 +180,23 @@ def updateGrade(request, gradeid):
 	else:
 		grade = Result.objects.get(id=gradeid)
 		return render(request, "services/updateGrade.html", {"grade": grade})
+
+@login_required
+@permission_required("services.change_fee")
+def updateFee(request, feeid):
+	if request.method == "POST":
+		name = request.POST.get("name")
+		amount = request.POST.get("amount")
+		status = request.POST.get("status")
+
+		fee = Fee.objects.get(id=feeid)
+
+		fee.name = name
+		fee.amount = amount
+		fee.status = status
+		fee.save()
+
+		return redirect("fees")
+	else:
+		fee = Fee.objects.get(id=feeid)
+		return render(request, "services/updateFee.html", {"fee": fee})

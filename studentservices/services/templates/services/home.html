@@ -8,7 +8,7 @@
 		<h2>Homepage</h2>
 			{%if user.username%}
 				<p>Hello {{user.username}}, You Are A {{group}}</p>
-				{%if group == "Student"%}
+				{%if group != "Lecturer"%}
 					<a href="{%url 'fees'%}">View Fees</a>
 					<br>
 				{%endif%}

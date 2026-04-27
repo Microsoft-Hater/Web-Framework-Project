@@ -7,10 +7,18 @@
 				border-collapse: collapse;
 			}
 		</style>
-		<title>My Fees</title>
+		{%if isHelpDesk%}
+			<title>Student Fee</title>
+		{%else%}
+			<title>My Fee</title>
+		{%endif%}
 	</head>
 	<body>
-		<h1>My Fees</h1>
+		{%if isHelpDesk%}
+			<h1>Student Fees</h1>
+		{%else%}
+			<h1>My Fees</h1>
+		{%endif%}
 
 		<form method="get" action="{%url 'fees'%}">
 			<label>Status:
@@ -20,11 +28,24 @@
 					<option value="Paid">Paid</option>
 				</select>
 			</label>
+			{%if isHelpDesk%}
+				<label>Student:
+					<select name="student">
+						<option value="">All</option>
+						{%for student in students%}
+							<option value="{{student.username}}">{{student.username}}</option>
+						{%endfor%}
+					</select>
+				</label>
+			{%endif%}
 			<button type="submit">Filter</button>
 		</form>
 
 		<table class="table">
 			<tr class="table">
+				{%if isHelpDesk%}
+					<th class="table">User</th>
+				{%endif%}
 				<th class="table">Name</th>
 				<th class="table">Amount</th>
 				<th class="table">Status</th>
@@ -32,21 +53,26 @@
 				<th class="table">Action</th>
 			</tr>
 			{%for fee in fees%}
-			<tr>
-				<td class="table">{{fee.name}}</td>
-				<td class="table">€{{fee.amount}}</td>
-				<td class="table">{{fee.status}}</td>
-				<td class="table">{{fee.date}}</td>
-				{%if fee.status == "Unpaid"%}
-					<td class="table"><a href="{%url 'payFee' fee.id%}">Pay Now</a></td>
-				{%else%}
-					<td class="table">No Action Needed</td>
-				{%endif%}
-			</tr>
+				<tr>
+					{%if isHelpDesk%}
+						<td class="table">{{fee.user}}</td>
+					{%endif%}
+					<td class="table">{{fee.name}}</td>
+					<td class="table">€{{fee.amount}}</td>
+					<td class="table">{{fee.status}}</td>
+					<td class="table">{{fee.date}}</td>
+					{%if fee.status == "Unpaid" and not isHelpDesk%}
+						<td class="table"><a href="{%url 'payFee' fee.id%}">Pay Now</a></td>
+					{%elif isHelpDesk%}
+						<td class="table"><a href="{%url 'updateFee' fee.id%}">Update Fee</a></td>
+					{%else%}
+						<td class="table">No Action Needed</td>
+					{%endif%}
+				</tr>
 			{%empty%}
-			<tr>
-				<td colspan="4">No Fees Found</td>
-			</tr>
+				<tr>
+					<td colspan="4">No Fees Found</td>
+				</tr>
 			{%endfor%}
 		</table>
 		<br>
