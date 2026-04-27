@@ -71,3 +71,10 @@ def ticketsView(request):
 	tickets = allTickets.order_by("-date")
 
 	return render(request, "services/tickets.html", {"tickets": tickets})
+
+@login_required
+def payFee(request, feeid):
+	fee = Fee.objects.get(id=feeid)
+	fee.status = "Paid"
+	fee.save()
+	return redirect("fees")

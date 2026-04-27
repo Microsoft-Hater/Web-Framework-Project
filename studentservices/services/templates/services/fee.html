@@ -29,6 +29,7 @@
 				<th class="table">Amount</th>
 				<th class="table">Status</th>
 				<th class="table">Date</th>
+				<th class="table">Action</th>
 			</tr>
 			{%for fee in fees%}
 			<tr>
@@ -36,6 +37,11 @@
 				<td class="table">€{{fee.amount}}</td>
 				<td class="table">{{fee.status}}</td>
 				<td class="table">{{fee.date}}</td>
+				{%if fee.status == "Unpaid"%}
+					<td class="table"><a href="{%url 'payFee' fee.id%}">Pay Now</a></td>
+				{%else%}
+					<td class="table">No Action Needed</td>
+				{%endif%}
 			</tr>
 			{%empty%}
 			<tr>

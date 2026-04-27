@@ -9,4 +9,5 @@ urlpatterns = [
 	path("fees/", views.feesView, name="fees"),
 	path("grades/", views.gradesView, name="grades"),
 	path("tickets/", views.ticketsView, name="tickets"),
+	path("payFee/<int:feeid>", views.payFee, name="payFee"),
 ]
