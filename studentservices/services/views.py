@@ -78,3 +78,15 @@ def payFee(request, feeid):
 	fee.status = "Paid"
 	fee.save()
 	return redirect("fees")
+
+@login_required
+def createTicket(request):
+	if request.method == "POST":
+		title = request.POST.get("title")
+		description = request.POST.get("description")
+
+		Ticket.objects.create(user=request.user, title=title, description=description)
+
+		return redirect("tickets")
+	else:
+		return render(request, "services/createTicket.html")

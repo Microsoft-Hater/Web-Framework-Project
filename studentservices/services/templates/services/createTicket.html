@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<style>
+			.labelFormat{
+				display: flex;
+				align-items: top;
+			}
+		</style>
+		<title>Create New Ticket</title>
+	</head>
+	<body>
+		<h2>Create New Ticket</h2>
+			<p style="color: red;">{{error}}</p>
+
+		<form method="post">
+			{%csrf_token%}
+			<label for="title">Title:</label>
+			<input type="text" id="title" name="title">
+
+			<br><br>
+
+			<div class="labelFormat">
+				<label for="description">Description:</label>
+				<textarea id="description" name="description" rows="6" cols="30"></textarea>
+			</div>
+			<br><br>
+
+			<button type="submit">Submit Ticket</button>
+		</form>
+	</body>
+</html>
